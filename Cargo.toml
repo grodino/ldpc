@@ -1,0 +1,18 @@
+[package]
+name = "ldpc"
+version = "0.1.0"
+edition = "2021"
+authors = ["Augustin Godinot <augustin.godinot@student-cs.fr>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+debug = true
+
+[dependencies]
+rand = "0.8.4" # Access random number generators
+rand_distr = "0.4.3" # Generate random numbers with given distribution
+rayon = "1.5.1" # Parallel iterators
+clap = { version = "3.0.10", features = ["derive"] }  # CLI tool
+serde = {version = "1.0", features = ["derive"] } # Serialization and desrialization into various dataformats
+serde_json = "1.0" # Working with json
+itertools = "0.10.2" # Additional iterator methods

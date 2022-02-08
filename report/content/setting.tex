@@ -1,0 +1,290 @@
+\section{Problem setting and notations}
+
+We note $\F_q$ the binary field  of cardinality $q$ (prime). In this work, we
+are primarily interested in the binary field $\F_2$. A LDPC code is a
+\textit{linear code}. It is represented by its encoder matrix $\bm{G} \in
+    \F_2^{K \times N}$.
+\begin{itemize}
+    \item The code length $N$ is the number of symbols per codeword.
+    \item The code dimension $K$ (assuming $\bm{G}$ is full rank) is the number
+          of basis codeword needed to generate the codebook.
+    \item The codebook is $\mathcal{C} = \text{Vect}((\bm{G}_{1,j})_j, \dots,
+              (\bm{G}_{K,j})_j)$ wit $\bm{G}_{i,j})_j$ being the $i^\text{th}$
+          line of $\mathbb{G}$
+\end{itemize}
+
+In practice, the decoding and generation algorithms we will describe are based
+on the parity check matrix $\bm{H} \in \F_2^{M \times N}, \; M = N - K$. Its rows
+describe parity check equations that all must be equal to zero (this follows
+from the syndrome computation). We will note $\bm{h}_j$ the columns of $\bm{H}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ENCODING                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Encoding}
+To encode a message $\bm{u} \in \F_2^K$ into a codeword $\bm{x} \in \F_2^N$, we
+use the generator matrix $\bm{G}$: $\bm{x} = \bm{u} \bm{G}$. Yet, implementing
+this encoding function naively yields poor encoding performance (i.e. too
+expensive in computing power). In fact, it is more efficient to consider what is
+called the \textit{systematic encoder}. As we will see, it will also help to
+reason about the link between the parity check matrix $\bm{H}$ and the generator
+matrix $\bm{G}$
+
+Thanks to full Gaussian elimination, it is always possible (if $\bm{G}$ is
+full-rank) to express $\bm{G}$ as the combination of $\bm{I}_K$ the identity
+matrix of $\F_2^K$ and another matrix $\bm{P}$.
+\begin{equation}
+    \bm{G} =
+    \begin{pmatrix}
+        \bm{I}_K & \bm{P}
+    \end{pmatrix}
+\end{equation}
+This expression is known as the \textit{systematic encoder} associated to the
+code $\mathcal{C}$. When the encoder matrix is in systematic form, we
+can express the parity check matrix as a function of the same matrix $\bm{P}$.
+\begin{equation}
+    \bm{H} =
+    \begin{pmatrix}
+        - \bm{P}^T & \bm{I}_{N-K}
+    \end{pmatrix}
+\end{equation}
+Now, with this expression, the encoded codeword becomes the
+concatenation of the original message and a set of parity bits:
+\begin{equation}
+    \bm{x} = (
+    \underbrace{\bm{u}}_\text{information bits} ,\;
+    \underbrace{\bm{u} \bm{P}^T}_\text{parity bits}
+    )
+\end{equation}
+This provides a nice interpretation of the encoding/decoding procedure:
+\begin{enumerate}
+    \item Compute the parity bits $\bm{p} = \bm{u} \bm{P}$ and append them
+          to the message $\bm{u}$. This creates the codeword $\bm{x}$
+    \item Send $\bm{x}$ through the channel.
+    \item Compute the decoded codeword $\widehat{\bm{x}}$ (we will detail this
+          decoding step in TODO). If the information bits get corrupted, then
+          they won't satisfy the parity check equations, and we will detect and
+          correct it (under certain conditions).
+\end{enumerate}
+
+One key property of a code is its rate $R_c$: the number of information bits per
+coded bit.
+\begin{equation}
+    R_c = \frac{K}{N} = \frac{N - M}{N}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHANNEL MODEL                                                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Channel model}
+In this work, we consider two classical channel models: the \acrlong{bec} and
+the \acrlong{bmc}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Binary Erasure Channel}
+TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Binary (Gaussian Memoryless Channel)}
+The codewords are modulated with a \acrshort{bpsk} modulation: $\forall i \in
+    \intrvl{1}{N}, \; s_i = (-1)^{x_i}$. The symbols are corrupted by
+\acrshort{awgn} noise $w_i \sim \mathcal{N}\left(0, \sigma^2\right)$.
+\begin{equation}
+    \forall i \in \intrvl{1}{N}, \quad
+    y_i = s_i + w_i
+\end{equation}
+
+\begin{iproposition}[SNR per bit]
+    Let $\gamma_b = \frac{E_b}{N_0/2}$ be the \acrshort{snr} per information bit. It is linked to the channel noise variance by
+    \begin{equation}
+        \gamma_b = \frac{1}{R_c} \frac{1}{\sigma^2}
+    \end{equation}
+\end{iproposition}
+
+\begin{proof}
+    Let $N_0$ be the power of the complex noise $z \sim \mathcal{CN}(0, N_0)$.
+    Since $w = \text{Re}(z)$, the effective power of the noise is
+    $\frac{N_0}{2}$. $E_c$ is the energy per coded bit. The energy
+    $E_b$ per uncoded bit can be expressed from the energy per coded bit: $E_b =
+        \frac{1}{R_c} E_c$. Thus, the \acrshort{snr} per coded bit $\gamma_c$ can be
+    expressed from two point of views:
+    \begin{equation}
+        \gamma_c = \frac{\E{s_i^2}}{\sigma^2} = \frac{E_c}{N_0 / 2} = \frac{E_b R_c}{N_0 / 2}
+    \end{equation}
+\end{proof}
+
+\begin{iproposition}[BER]
+    The theoretical \acrshort{ber} $P_e(\gamma_b)$ is
+    \begin{equation}
+        P_e(\gamma_b) = Q(\sqrt{2 R_c \gamma_b})
+        \quad\text{with}\;
+        Q(x) = \frac{1}{\sqrt{2 \pi}} \int_x^{+\infty} e^{-\frac{x^2}{2}} dx
+    \end{equation}
+\end{iproposition}
+
+\begin{proof}
+    The probability for a $s_i = -1$ to be erroneously decoded as $s_i = 1$ is
+    $\Proba{w_i > 1}$. By symmetry of the channel, the probability for a $s_i =
+        -1$ to be decoded as $s_i = 1$ is the same. Thus, the expression of $P_e$
+    \begin{equation}
+        P_e = \Proba{w_i > 1} = \int_1^{+\infty} \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(- \frac{x^2}{2 \sigma^2}\right) dx
+    \end{equation}
+    With a change of variable, we find the result.
+\end{proof}
+
+\begin{iproposition}[BLER]
+    The theoretical \acrshort{bler} $P_b(\gamma_b)$ is
+    \begin{equation}
+        P_b(\gamma_b) = 1 - (1 - P_e(\gamma_b))^N
+    \end{equation}
+\end{iproposition}
+
+\begin{proof}
+    We have $P_b = \Proba{\text{there is at least one bit error}} = 1 -
+        \Proba{\text{there is no bit error}}$. Since the channel is memoryless,
+    $\Proba{\text{there is no bit error}} = (1 - P_e)^N$.
+\end{proof}
+
+\begin{iproposition}[Log Likelihood Ratio]
+    The \acrfull{llr} $\Gamma_i$ of each received symbol $y_i, \, i \in \intrvl{1}{N}$ for
+    the \acrshort{bmc} channel is
+    \begin{equation}
+        \Gamma_i = \logp{\frac{p\left(y_i \middle| x_i = 0 \right)}{p\left(y_i \middle| x_i = 1 \right)}}
+        = \frac{2}{\sigma^2} y_i
+    \end{equation}
+\end{iproposition}
+
+\begin{proof}
+    The noise $w_i$ is Gaussian, therefore, by change of variable,
+    \begin{equation}
+        \begin{cases}
+            p\left(y_i \middle| x_i = 0 \right) = \frac{1}{\sqrt{2 \pi \sigma^2}}\exp\left(-\frac{(y_i - 1)^2}{2 \sigma^2}\right) \\
+            p\left(y_i \middle| x_i = 1 \right) = \frac{1}{\sqrt{2 \pi \sigma^2}}\exp\left(-\frac{(y_i + 1)^2}{2 \sigma^2}\right)
+        \end{cases}
+        \Rightarrow \Gamma_i = \frac{1}{2 \sigma^2} \left(1 + 2 y_i + y_i^2 - (1 - 2 y_i + y_i ^2)\right)
+    \end{equation}
+    Combining the "$1$"s and "$y_i^2$"s yields the result.
+\end{proof}
+
+The uncoded \acrshort{ber} and \acrshort{bler} can be computed by setting $R_c =
+    1$ in the propositions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Montecarlo simulation}
+To study the \acrlong{ber} and \acrlong{bler} of the different codes we will
+introduce, we simulate the propagation of codewords through the channel. Due to
+symmetries in the \acrshort{bec} and \acrshort{bmc} channels and the geometric
+uniformity of \acrshort{ldpc} codes, the error probability is equal to the error
+probability conditioned on the transmission of the all-zero codeword.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DECODING                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Decoding}
+Decoding is done via \acrfull{bp}. On the \acrshort{bec} channel, the beliefs
+are bits and erasures. On the \acrshort{bmc} channel, the beliefs are
+\acrlong{llr}s. The implemented algorithms are those described in
+\autoref{algo:bec_decoding} (\acrshort{bec} channel) and
+\autoref{algo:bmc_decoding} (\acrshort{bmc} channel).
+
+
+\begin{algorithm}
+    \SetAlgoLined
+    \DontPrintSemicolon
+    \KwIn{%
+    parity check matrix $\bm{H}$ \newline
+    tanner graph $\mathcal{G}_{\bm{H}}$ \newline
+    received message $\bm{y} \in \set{0, 1, e}^N$ \newline
+    maximum number of iterations $N_\text{it}$
+    }
+    \KwResult{the estimated codeword $\hat{\bm{x}}$}
+
+    $\bm{\beta} \leftarrow \bm{y}$ \tcp*[r]{initial belief}
+    $\bm{\Phi} \leftarrow (\bm{y}, \dots, \bm{y}) \in \R^{N \times M}$ \tcp*[r]{bit to check messages}
+    $\bm{\Psi} \leftarrow \bm{0} \in \R^{M \times N}$ \tcp*[r]{check to bit messages}
+
+    \While{$\exists e \in \bm{\beta}$ and $n_\text{it} < N_\text{it}$}{%
+        \For(\tcp*[f]{check to bit}){check node $i \in \intrvl{1}{M}$}{%
+            \eIf{$\forall k \in \mathcal{N}_c(i) \backslash \{j\},\; \bm{\Phi}_{k, i} \neq e$}{%
+                $\bm{\Psi}_{i, k} \leftarrow
+                    \sum_{k \in \mathcal{N}_c(i) \backslash \{j\}}
+                    \bm{\Phi}_{k, i} \pmod{2}$%
+            }{%
+                $\bm{\Phi}_{k, i} \leftarrow e$
+            }
+        }
+
+        \For(\tcp*[f]{compute beliefs}){bit node $j \in \intrvl{1}{N}$}{%
+            \eIf{$\forall k \in \mathcal{N}_c(i) \backslash \{j\},\; \bm{\Phi}_{k, i} = e$}{%
+                $\bm{\Phi}_{k, i} \leftarrow e$%
+            }{%
+                $\bm{\beta}_j \leftarrow \bm{\Psi}_{k, j}$
+            }
+        }
+
+        \For(\tcp*[f]{bit to check}){bit node $j \in \intrvl{1}{N}$}{%
+            \eIf(\tcp*[f]{if error, try to correct it with neighbors}){$\bm{y}_j = e$}{%
+                \For{check node $k \in \mathcal{N}_v(j)$}{%
+                    \eIf{$\exists k_0 \in \mathcal{N}_v(j) \backslash \{i\},\; \bm{\Phi}_{k_0, j} \neq e$}{%
+                        $\bm{\Phi}_{j,i} \leftarrow \bm{\Psi}_{k_0, j}$%
+                    }{%
+                        $\bm{\Phi}_{k, i} \leftarrow e$%
+                    }%
+                }%
+            }{%
+                $\bm{\Phi}_{j, i} \leftarrow \bm{y}_j$%
+            }%
+        }
+
+        \tcp{return the estimated codeword (even if not part of the codebook)}
+        \Return $\hat{\bm{x}} = \bm{\beta}$
+    }
+
+    \caption{Belief Propagation decoding for the \acrshort{bec} channel}
+    \label{algo:bec_decoding}
+\end{algorithm}
+
+\begin{algorithm}
+    \SetAlgoLined
+    \DontPrintSemicolon
+    \KwIn{%
+    parity check matrix $\bm{H}$ \newline
+    tanner graph $\mathcal{G}_{\bm{H}}$ \newline
+    log likelihood ratios $\bm{\Gamma}$ \newline
+    maximum number of iterations $N_\text{it}$
+    }
+    \KwResult{the estimated codeword $\hat{\bm{x}}$}
+
+    $\bm{\Lambda} \leftarrow \bm{\Gamma}$ \tcp*[r]{initialize the approximate LLRs}
+    $\bm{\Phi} \leftarrow (\bm{\Gamma}, \dots, \bm{\Gamma}) \in \R^{N \times M}$ \tcp*[r]{bit to check messages}
+    $\bm{\Psi} \leftarrow \bm{0} \in \R^{M \times N}$ \tcp*[r]{check to bit messages}
+    hard decode $\bm{\Gamma}$ into $\hat{\bm{x}}$
+
+    \While{$\hat{\bm{x}} \bm{H} \neq \bm{0}$ and $n_\text{it} < N_\text{it}$}{%
+        \For(\tcp*[f]{check to bit}){check node $i \in \intrvl{1}{M}$}{%
+            \For{bit node $k \in \mathcal{N}_c(i)$}{%
+                $\bm{\Psi}_{i, k} \leftarrow 2 \tanh^{-1}\left(
+                    \prod_{k^\prime \in \mathcal{N}_c(i) \backslash \{k\}}
+                    \tanh\left(\frac{\bm{\Phi}_{k^\prime, i}}{2}\right)
+                    \right)$
+            }
+        }
+
+        $\forall j \in \intrvl{1}{N}, \; \bm{\Lambda}_j \leftarrow \bm{\Gamma}_j + \sum_{k \in \mathcal{N}_v(j)} \bm{\Psi}_{k, j}$ \tcp*[r]{compute beliefs}
+        hard decode $\bm{\Lambda}$ into $\hat{\bm{x}}$
+
+        \For(\tcp*[f]{bit to check}){bit node $j \in \intrvl{1}{N}$}{%
+            \For{check node $k \in \mathcal{N}_v(j)$}{%
+                $\bm{\Phi}_{j, k} \leftarrow \bm{\Lambda}_j - \bm{\Phi}_{k, j}$
+            }
+        }
+
+        \tcp{return the estimated codeword (even if not part of the codebook)}
+        \Return $\hat{\bm{x}}$
+    }
+
+    \caption{Belief Propagation decoding for the \acrshort{bmc} channel}
+    \label{algo:bmc_decoding}
+\end{algorithm}

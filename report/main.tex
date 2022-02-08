@@ -1,0 +1,115 @@
+\documentclass[a4paper]{color-report}
+
+\usepackage[utf8]{inputenc}		% Encode characters into latex's representation
+\usepackage[T1]{fontenc}		% For font encoding
+\usepackage[english]{babel} 	% Format text according to language convention
+\usepackage{import}				% For advanced imports (relative, no doubles ...)
+\usepackage{todonotes}			% For nice TODOs
+\usepackage{biblatex}			% For bibliography
+\usepackage{csquotes}			% Needed by biblatex polyglossia
+\usepackage{graphics}			% To display pictures
+\usepackage{bm}					% For bold math caracters
+\usepackage{subcaption}			% For mutliple figures in one float
+\usepackage[acronym]{glossaries}    % For a list of accronyms and term definitions
+\usepackage{multirow}           % For tabular cells that span multiple rows
+\usepackage{layouts}            % Display the textwidth and various lengths
+
+\usepackage{grodino}			% custom package with custom math helpers
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% STYLES                                                                       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{black}{RGB}{0, 0, 0}
+\definecolor{black-light}{RGB}{31, 30, 33}
+\definecolor{primary}{RGB}{156, 0, 60}
+\colorlet{primary-light}{primary!50!white}
+\definecolor{accent-1}{RGB}{252, 135, 58}
+\colorlet{accent-1-light}{accent-1!75!white}
+\definecolor{accent-2}{RGB}{0, 160, 130}
+\definecolor{accent-2-light}{RGB}{140, 190, 170}
+\definecolor{accent-3}{RGB}{250, 100, 230}
+\definecolor{accent-3-light}{RGB}{200, 160, 190}
+
+\mainLogo{logos/CS-round-monochrome.png}
+\secondaryLogo{logos/upsaclay.png}
+
+\captionsetup{
+	justification=justified, 
+	width=.9\textwidth
+}
+
+% Current font does not support \bm 
+% \renewcommand{\bm}[1]{\symbf{#1}}
+\newcommand{\F}{\mathbb{F}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% METADATA                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mandatory fields
+\title{Low Density Sparse Codes}
+\author{Augustin Godinot}
+\date{\today}
+\subtitle{Decoding and generation}
+\reportType{LAB REPORT}
+\info{}{M2 SAR \\ Advanced Wireless \\ Communications Systems \\ C5 -- Coding Theory}
+\info{Contact}{%
+    Augustin Godinot\hfill \href{mailto:augustin.godinot@student-cs.fr}{augustin.godinot@student-cs.fr}
+}
+\info{Teacher}{%
+    Antoine Berthet \hfill \href{mailto:antoine.berthet@centralesupelec.fr}{antoine.berthet@centralesupelec.fr}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GLOSSARY                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeglossaries
+\newacronym{ldpc}{LDPC}{Low Density Sparse Code}
+\newacronym{bec}{BEC}{Binary Erasure Channel}
+\newacronym{bmc}{BMC}{Binary (Gaussian) Memoryless Channel}
+\newacronym{bpsk}{BPSK}{Binary Phase Shift Keying}
+\newacronym{awgn}{AWGN}{Additive White Gaussian Noise}
+\newacronym{ber}{BER}{Bit Error Rate}
+\newacronym{bler}{BLER}{Block Error Rate}
+\newacronym{snr}{SNR}{Signal-to-Noise-Ratio}
+\newacronym{bp}{BP}{Belief Propagation}
+\newacronym{llr}{LLR}{Log Likelihood Ratio}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\printglossary[type=\acronymtype, title=Acronyms]
+% \listoffigures
+% \listoftables
+\newpage
+
+Used in IEEE 802.11n-2009 (Wi-Fi), 10GB Ethernet and 5G, \acrshort{ldpc} codes
+are starting to replace Turbo Codes in systems with a large \textit{code rate}.
+In this work, we study \acrfull{ldpc} in two channels: the \acrfull{bec} and the
+\acrfull{bmc}. To quantify the performance of the codes, we will compute their
+\acrfull{ber} $P_e$ and \acrfull{bler} $P_b$.
+
+\paragraph{Implementation} The LDPC decoding and code generation were
+implemented in \texttt{Rust}. All the code is thoroughly documented and can be
+accessed at this address TODO. The commands associated to each figure in the
+report are described in the \texttt{readme.md} file.
+
+\input{content/setting}
+\input{content/gallager}
+\input{content/mackay}
+
+\section*{Conclusion}
+In this work, we simulated two families of \acrshort{ldpc} codes: Gallager codes
+and Mac Kay \& Neal codes.
+
+Implementation improvements: drop the hashmap since the messages support (ie the
+edges) is known ahead of time, could just use a lookup table...
+Use the sign factorization we saw in an exercise to avoid computing tanh and atanh
+
+% \newpage
+% \appendix
+
+
+\end{document}

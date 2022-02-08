@@ -1,0 +1,46 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{grodino}[2021/06/01 Example package]
+
+\RequirePackage{amsmath, amssymb}   % For math symbols and commands
+\RequirePackage{stmaryrd}   		% For integers interval signs
+
+% Sets and intervals
+\newcommand{\R}{\mathbb{R}} 						% The set of real numbers
+\newcommand{\N}{\mathbb{N}} 						% The set of integers
+\newcommand{\set}[1]{\left\{ #1 \right\}} 			% A set 
+\newcommand{\intrvl}[2]{							% A integer interval
+    {\left\llbracket #1, #2 \right\rrbracket}
+} 
+
+% Norms
+\newcommand{\norm}[1]{\left\Vert #1\right\Vert} 	% Norm of a vector
+
+% Misc
+\NewDocumentCommand{\floor}{m}{                     % The floor operator
+    \left\lfloor #1 \right\rfloor
+}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert} 	    % The absolute value operator
+\NewDocumentCommand{\logp}{m}{\log\left( #1 \right)}    % Log function with parenthesis
+\DeclareMathOperator*{\argmax}{arg\,max}                % argmax symbol
+\DeclareMathOperator*{\argmin}{arg\,min}                % argmin symbol
+\DeclareMathOperator*{\SNR}{\text{SNR}}
+
+% Probability theory
+\NewDocumentCommand{\E}{o m}{                       % The mathematical expected value of a random variable
+    \IfValueTF{#1}{%
+        \mathbb{E}_{#1}\left[ #2 \right]%
+    }{%
+        \mathbb{E}\left[ #2 \right]%
+    }%
+}
+\newcommand{\Proba}[1]{\mathbb{P}\left( #1 \right)} % The probability of an event
+\newcommand{\under}{\;\middle\vert\;} 				% Conditional probability "under the condition" symbol
+
+% MAPF
+\newcommand{\Path}{\varphi}			 				% An agent path
+\newcommand{\cost}{\mathcal{C}}						% The cost of a trajectory
+\newcommand{\agent}{\mathcal{A}}					% The symbol for an agent
+
+% COOPA
+\NewDocumentCommand{\grid}{}{\mathcal{G}}           % A grid graph
+\NewDocumentCommand{\search}{}{\mathcal{S}}         % A search graph

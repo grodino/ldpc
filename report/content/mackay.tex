@@ -1,0 +1,54 @@
+\section{MacKay \& Neal LDPC codes}
+Mac kay \& Neal codes are a class of code that can be generated with rank and
+non-regular degree distribution constraints (contrary to Gallager codes).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GENERATION                                                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Generation}
+The generation of such codes is done iteratively on the columns of the parity
+check matrix $\bm{H}$. Assuming that the first $j$ columns have been generated,
+we randomly draw a column $\bm{\tilde{h}}$ with degree $\bm{d_v}[j+1]$. If the
+row degree constraints are satisfied up until the column $j+1$, then
+$\bm{h}_{j+1} \leftarrow \bm{\tilde{h}}$, else, retry. To ensure convergence, a
+backtracking mechanism is used. A maximum number of retries $n_\text{retry}$ is
+set. If it is reach while trying to generate a column $j + 1$, then we erase the
+last $t$ columns and restart from $j - t$.
+
+Therefore, there are two parameters to set in this algorithm: the number of
+retries $n_\text{retry}$ and the backtracking depth $t$. A rule of thumb for the
+number of retries is the following. If we want to create a column with $M$
+coefficients and degree $d_v$, there are $\binom{M}{d_v}$ possibilities. The
+number of retries should be of the order of this value (which can get pretty
+large). However, for large code sizes, this method quickly becomes intractable
+(the number of combinations explodes). The backtracking depth is arbitrarily set
+to TODO.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MONTECARLO SIMULATION ON THE BMC CHANNEL                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Montecarlo simulation on the BMC channel}
+
+The objective of this part is to study the effect of the irregularity of the
+degree distribution and rank of Mac Kay \& Neal codes on their performance in
+terms of \acrshort{ber} and \acrshort{bler}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Regular Mac Kay \& Neal codes}
+First, we consider codes with a regular degree distribution as for Gallager
+codes (\autoref{sec:gallager_codes}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Irregular Mac Kay \& Neal codes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Irregular full rank Mac Kay \& Neal codes}
+
+
+How to choose the degree distributions ? Regular degree: take the first smallest
+values verifying the condition on the total degree. Irregular degree: take the
+previous regular degrees and perturb an given proportion of bit node degrees
+(i.e. connect a given number of bits to a higher number of check nodes).
+
+Implementation issue: spend a lot of time computing the tanh and atanh (see
+flamegraph)
