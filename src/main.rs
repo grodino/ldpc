@@ -115,7 +115,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if regular && full_rank {
                 unimplemented!("Cannot generate full rank, regular LDPC parity matrices for now");
             }
-            println!(r#""name": "MacKay", "#);
+            println!(r#""name": "MacKay, full rank [{full_rank}], regular [{regular}]", "#);
             println!(r#""codes": ["#);
 
             // Rate 1/2 code
@@ -125,16 +125,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 args.n_degree,
                 regular,
                 full_rank,
-                4,
+                10,
             );
-            // mackay_family_montecarlo::<12, 6>(
-            //     &snr_values,
-            //     args.n_realizations,
-            //     args.n_degree,
-            //     regular,
-            //     full_rank,
-            //     2,
-            // );
 
             println!(",");
             // mackay_family_montecarlo::<384, 192>(
@@ -161,7 +153,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 args.n_degree,
                 regular,
                 full_rank,
-                192 / 3,
+                10,
             );
             // println!(",");
             // mackay_family_montecarlo::<384, 256>(

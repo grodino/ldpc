@@ -55,16 +55,19 @@ def main(input: IO, save: bool):
         for code in codes:
             noise_parameter = np.array(code['noise_parameter'])
 
+            valid_ber = np.array(code['bit_error_rate']) > 0
             ber_ax.semilogy(
-                10 * np.log10(noise_parameter),
-                code['bit_error_rate'],
+                10 * np.log10(noise_parameter[valid_ber]),
+                np.array(code['bit_error_rate'])[valid_ber],
                 '-+',
                 label=f"${code['name']}$",
                 nonpositive='mask'
             )
+
+            valid_bler = np.array(code['block_error_rate']) > 0
             bler_ax.semilogy(
-                10 * np.log10(noise_parameter),
-                code['block_error_rate'],
+                10 * np.log10(noise_parameter[valid_bler]),
+                np.array(code['block_error_rate'])[valid_bler],
                 '-+',
                 label=f"${code['name']}$",
                 nonpositive='mask'

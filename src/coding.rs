@@ -203,20 +203,15 @@ impl<const N: usize, const M: usize> fmt::Display for MacKayNealGenerator<N, M> 
             (
                 DegreeDistribution::Regular(bit_degree),
                 DegreeDistribution::Regular(parity_degree),
-            ) => write!(
-                f,
-                "MacKay, d_v = {}, d_c = {}, full rank [{:?}]",
-                bit_degree, parity_degree, full_rank
-            ),
+            ) => write!(f, "d_v = {}, d_c = {}", bit_degree, parity_degree),
             (
                 DegreeDistribution::Distribution(bit_degree),
                 DegreeDistribution::Distribution(parity_degree),
             ) => write!(
                 f,
-                "MacKay, d_v = {:0.2}, d_c = {:0.2}, full rank [{:?}]",
+                "d_v = {:0.2}, d_c = {:0.2}",
                 bit_degree.iter().sum::<usize>() as f64 / N as f64,
                 parity_degree.iter().sum::<usize>() as f64 / M as f64,
-                full_rank
             ),
             _ => unreachable!(),
         }
