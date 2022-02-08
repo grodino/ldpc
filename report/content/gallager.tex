@@ -87,3 +87,39 @@ the total degree from $(d_v=3, d_c=6)$ (resp.  $(d_v=3, d_c=9)$) to $(d_v=4,
     d_c=8)$ (resp.  $(d_v=4, d_c=12)$) does not lead to a significant SNR
 improvement (especially or the rate $2/3$ code). But, during the execution of
 the decoder, the codes take much longer to decode.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A DIGRESSION ON CODE PERFORMANCE                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A digression on code performance}
+
+Depending on the average total degree, running the code on my \texttt{Intel
+    i5-8250U} machine took up to $0.1$ second per codeword ($N = 768$). This
+yields a bit rate of $7680$ bits/s which might seem low compared to the
+current desired bit rates (in the order of Gb/s for the best home internet).
+To understand why the code seems so slow, it is interesting to take a look
+at the \textit{flamegraph} of the execution. This flamegraph is depicted in
+\autoref{fig:flamegraph_gallager} (on the digital version of this report, it
+is possible to zoom in to read the text). This figure highlights two
+drawbacks of \acrshort{bp} decoding:
+
+\begin{itemize}
+    \item The $\tanh$ and $\tanh^{-1}$ functions are very expensive to compute
+    \item Although easier to manipulate, using a hash table to store the bit to
+          check and check to bit messages is detrimental to the decoding
+          performance (because of the cost of hashing and the cost of accessing
+          the stored values).
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/flamegraph.png}
+    \caption{Flamegraph of Belief Propagation LDPC decoding on the BMC channel.
+        The horizontal axis represents the proportion of time the execution
+        spent in a given function: the more time a function took to execute, the
+        larger its band is. The vertical axis represents the call stack of each
+        function.%
+    }
+    \label{fig:flamegraph_gallager}
+\end{figure}
