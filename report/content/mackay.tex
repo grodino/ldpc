@@ -38,8 +38,55 @@ terms of \acrshort{ber} and \acrshort{bler}.
 First, we consider codes with a regular degree distribution as for Gallager
 codes (\autoref{sec:gallager_codes}).
 
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_regular_rate-0.5.pgf}
+        \caption{$R_c = 1/2$}
+    \end{subfigure}%
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_regular_rate-0.67.pgf}
+        \caption{$R_c = 2/3$}
+    \end{subfigure}%
+    \caption[Montecarlo simulation of regular Mac-Kay codes of length $N = 192$]{%
+        Montecarlo simulation of regular Mac-Kay codes of length $N = 192$. On the top
+        graphs, the codes all have a rate of $1/2$. On the bottom graphs, all
+        the codes have a rate of $2/3$. When the (bit or block) error
+        probability is zero, the corresponding point is masked. The codes are
+        characterized by their average row and column degree%
+    }
+    \label{fig:mackay_regular_bmc}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Irregular Mac Kay \& Neal codes}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_rate-0.5.pgf}
+        \caption{$R_c = 1/2$}
+    \end{subfigure}%
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_rate-0.67.pgf}
+        \caption{$R_c = 2/3$}
+    \end{subfigure}%
+    \caption[Montecarlo simulation of Mac-Kay codes of length $N = 192$]{%
+        Montecarlo simulation of Mac-Kay codes of length $N = 192$. On the top
+        graphs, the codes all have a rate of $1/2$. On the bottom graphs, all
+        the codes have a rate of $2/3$. When the (bit or block) error
+        probability is zero, the corresponding point is masked. The codes are
+        characterized by their average row and column degree%
+    }
+    \label{fig:mackay_bmc}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Irregular full rank Mac Kay \& Neal codes}

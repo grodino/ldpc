@@ -52,7 +52,6 @@ TODO : print number of iterations in BP, number of realizations etc...
 
 \begin{figure}
     \centering
-
     \begin{subfigure}{\textwidth}
         \centering
         \input{figures/gallager_rate-0.5.pgf}
@@ -64,12 +63,11 @@ TODO : print number of iterations in BP, number of realizations etc...
         \input{figures/gallager_rate-0.67.pgf}
         \caption{$R_c = 2/3$}
     \end{subfigure}%
-    \caption{%
+    \caption[Montecarlo simulation of a Gallager codes of length $N = 768$]{%
         Montecarlo simulation of a Gallager codes of length $N = 768$. On the
         top graphs, the codes all have a rate of $1/2$. On the bottom graphs,
         all the codes have a rate of $2/3$. When the (bit or block) error
-        probability is zero, the corresponding point is set to the bottom of the
-        graph (thus the vertical lines).%
+        probability is zero, the corresponding point is masked.%
     }
     \label{fig:gallager_bmc}
 \end{figure}
@@ -115,7 +113,7 @@ drawbacks of \acrshort{bp} decoding:
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/flamegraph.png}
-    \caption{Flamegraph of Belief Propagation LDPC decoding on the BMC channel.
+    \caption[Flamegraph of Belief Propagation LDPC decoding on the BMC channel]{Flamegraph of Belief Propagation LDPC decoding on the BMC channel.
         The horizontal axis represents the proportion of time the execution
         spent in a given function: the more time a function took to execute, the
         larger its band is. The vertical axis represents the call stack of each
