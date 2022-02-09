@@ -22,7 +22,7 @@ coefficients and degree $d_v$, there are $\binom{M}{d_v}$ possibilities. The
 number of retries should be of the order of this value (which can get pretty
 large). However, for large code sizes, this method quickly becomes intractable
 (the number of combinations explodes). The backtracking depth is arbitrarily set
-to TODO.
+to $1 + N/3$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MONTECARLO SIMULATION ON THE BMC CHANNEL                                     %
@@ -36,7 +36,10 @@ terms of \acrshort{ber} and \acrshort{bler}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Regular Mac Kay \& Neal codes}
 First, we consider codes with a regular degree distribution as for Gallager
-codes (\autoref{sec:gallager_codes}).
+codes (\autoref{sec:gallager_codes}). The results are plotted in
+\autoref{fig:mackay_regular_bmc}. First, we observe that despite having a much
+lower length than the studied Gallager codes ($N=192$), there performance are
+comparable.
 
 \begin{figure}
     \centering
@@ -63,6 +66,18 @@ codes (\autoref{sec:gallager_codes}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Irregular Mac Kay \& Neal codes}
+Now, we consider a class of irregular Mac Kay \& Neal codes. The considered
+degree distributions are created in two steps :
+\begin{enumerate}
+    \item Start with a regular degree distribution $\bm{{d_c}}_j = d_c$ and
+          $\bm{{d_v}}_i = d_v$.
+    \item Increase the degree of $n_D$ codewords by an amount $D$. To satisfy
+          the total degree equation ($\sum_j \bm{{d_c}}_j = \sum_i
+              \bm{{d_v}}_i$), do the same with the degree of bit nodes.
+\end{enumerate}
+In the following experiments (\autoref{fig:mackay_bmc}), we chose $D = 3$ and
+$n_D = 10$. We can observe that the irregularity in the degree distribution
+increases the performance of the codes by a small margin.
 
 \begin{figure}
     \centering
@@ -90,12 +105,29 @@ codes (\autoref{sec:gallager_codes}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Irregular full rank Mac Kay \& Neal codes}
+In this last experiment, we study the effect of having a full rank parity check
+matrix $\bm{H}$. Observing \autoref{fig:mackay_full-rank_bmc}, there is little
+difference with Mac Kay codes without rank constraints.
 
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_full-rank_rate-0.5.pgf}
+        \caption{$R_c = 1/2$}
+    \end{subfigure}%
 
-How to choose the degree distributions ? Regular degree: take the first smallest
-values verifying the condition on the total degree. Irregular degree: take the
-previous regular degrees and perturb an given proportion of bit node degrees
-(i.e. connect a given number of bits to a higher number of check nodes).
-
-Implementation issue: spend a lot of time computing the tanh and atanh (see
-flamegraph)
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{figures/mac-kay_full-rank_rate-0.67.pgf}
+        \caption{$R_c = 2/3$}
+    \end{subfigure}%
+    \caption[Montecarlo simulation of full-rank Mac-Kay codes of length $N = 192$]{%
+        Montecarlo simulation of full-rank Mac-Kay codes of length $N = 192$. On the top
+        graphs, the codes all have a rate of $1/2$. On the bottom graphs, all
+        the codes have a rate of $2/3$. When the (bit or block) error
+        probability is zero, the corresponding point is masked. The codes are
+        characterized by their average row and column degree%
+    }
+    \label{fig:mackay_full-rank_bmc}
+\end{figure}

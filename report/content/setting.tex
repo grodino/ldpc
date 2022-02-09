@@ -62,9 +62,10 @@ This provides a nice interpretation of the encoding/decoding procedure:
           to the message $\bm{u}$. This creates the codeword $\bm{x}$
     \item Send $\bm{x}$ through the channel.
     \item Compute the decoded codeword $\widehat{\bm{x}}$ (we will detail this
-          decoding step in TODO). If the information bits get corrupted, then
-          they won't satisfy the parity check equations, and we will detect and
-          correct it (under certain conditions).
+          decoding step in \autoref{subsec:bp_decoding}). If the information
+          bits get corrupted, then they won't satisfy the parity check
+          equations, and we will detect and correct it (under certain
+          conditions).
 \end{enumerate}
 
 One key property of a code is its rate $R_c$: the number of information bits per
@@ -82,11 +83,7 @@ In this work, we consider two classical channel models: the \acrlong{bec} and
 the \acrlong{bmc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Binary Erasure Channel}
-TODO
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Binary (Gaussian Memoryless Channel)}
+\subsubsection{Binary (Gaussian) Memoryless Channel}
 The codewords are modulated with a \acrshort{bpsk} modulation: $\forall i \in
     \intrvl{1}{N}, \; s_i = (-1)^{x_i}$. The symbols are corrupted by
 \acrshort{awgn} noise $w_i \sim \mathcal{N}\left(0, \sigma^2\right)$.
@@ -182,12 +179,16 @@ probability conditioned on the transmission of the all-zero codeword.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DECODING                                                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Decoding}
+\subsection{Decoding}\label{subsec:bp_decoding}
 Decoding is done via \acrfull{bp}. On the \acrshort{bec} channel, the beliefs
 are bits and erasures. On the \acrshort{bmc} channel, the beliefs are
 \acrlong{llr}s. The implemented algorithms are those described in
 \autoref{algo:bec_decoding} (\acrshort{bec} channel) and
 \autoref{algo:bmc_decoding} (\acrshort{bmc} channel).
+
+The maximum number of iterations for the \acrshort{bp} algorithm is set to
+$100$. The number of channel realizations in the Montecarlo simulations is set
+to $1000$.
 
 
 \begin{algorithm}

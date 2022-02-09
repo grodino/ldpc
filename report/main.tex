@@ -102,14 +102,15 @@ report are described in the \texttt{readme.md} file.
 
 \section*{Conclusion}
 In this work, we simulated two families of \acrshort{ldpc} codes: Gallager codes
-and Mac Kay \& Neal codes.
+and Mac Kay \& Neal codes on the \acrshort{bmc} channel. We showed that Mac Kay
+\& Neal codes are a more powerful family of codes that Gallager types, at the
+cost of a more complicated generation process.
+\newpage
+\appendix
 
-Implementation improvements: drop the hashmap since the messages support (ie the
-edges) is known ahead of time, could just use a lookup table...
-Use the sign factorization we saw in an exercise to avoid computing tanh and atanh
+\section{BEC channel}
 
-% \newpage
-% \appendix
-
+Even though we did not study them in this report, the code contains functions to
+perform the same analysis on the \acrshort{bec} channel.
 
 \end{document}
