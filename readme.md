@@ -1,7 +1,7 @@
 # Error correcting codes toolbox
 
 This repository contains functions to generate, decode and simulate LDPC (Low Density Sparse Graph) codes for research purposes. It has been created as a mini-project for the 2022 [Master SAR](https://www.universite-paris-saclay.fr/formation/master/electronique-energie-electrique-automatique/m2-advanced-wireless-communications-systems) *Coding theory* course with [Prof. Antoine Berthet](https://l2s.centralesupelec.fr/u/berthet-antoine/).
-You can do whatever with this code as long as you credit me.
+You can do whatever you with this code as long as you credit me.
 
 ## Installation
 

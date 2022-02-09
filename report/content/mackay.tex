@@ -12,8 +12,8 @@ we randomly draw a column $\bm{\tilde{h}}$ with degree $\bm{d_v}[j+1]$. If the
 row degree constraints are satisfied up until the column $j+1$, then
 $\bm{h}_{j+1} \leftarrow \bm{\tilde{h}}$, else, retry. To ensure convergence, a
 backtracking mechanism is used. A maximum number of retries $n_\text{retry}$ is
-set. If it is reach while trying to generate a column $j + 1$, then we erase the
-last $t$ columns and restart from $j - t$.
+set. If it is reached while trying to generate a column $j + 1$, then we erase
+the last $t$ columns and restart from $j - t$.
 
 Therefore, there are two parameters to set in this algorithm: the number of
 retries $n_\text{retry}$ and the backtracking depth $t$. A rule of thumb for the
